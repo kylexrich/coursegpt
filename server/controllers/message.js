@@ -23,7 +23,7 @@ async function createMessage(req, res) {
     const userId = req.params.userId;
     const senderType = req.params.senderType;
 
-    if (senderType !== 'User' || senderType !== 'CourseGPT') {
+    if (senderType !== 'User' && senderType !== 'CourseGPT') {
       return res.status(400).json({ error: 'Invalid sender type' });
     }
 
