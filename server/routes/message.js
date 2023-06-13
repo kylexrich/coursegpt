@@ -14,7 +14,7 @@ const { validateToken } = require('../controllers/auth');
 router.get('/:messageId', getMessage);
 router.get('/', getAllMessages);
 
-router.post('/', createMessage);
+router.post('/:senderType', createMessage);
 
 router.put('/:messageId', updateMessage);
 

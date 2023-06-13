@@ -17,15 +17,20 @@ async function getMessage(req, res) {
   res.send({ data: `Hello get  msg ${msgId} from chat ${chatId}` });
 }
 
-// TODO: make endpoint for coursegpt later
 async function createMessage(req, res) {
   try {
     const chatId = req.params.chatId;
     const userId = req.params.userId;
+    const senderType = req.params.senderType;
+
+    if (senderType !== 'User' || senderType !== 'CourseGPT') {
+      return res.status(400).json({ error: 'Invalid sender type' });
+    }
+
     const message = new Message({
       chat: chatId,
       user: userId,
-      senderType: 'User',
+      senderType: senderType,
       content: req.body.content,
     });
     const newMessage = await message.save();
