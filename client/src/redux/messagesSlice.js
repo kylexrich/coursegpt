@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../api/axiosInstance';
 import buildObjectMapFromArray from '../util/buildObjectMapFromArray';
+import { setActiveChat } from './chatsSlice';
 
 // State Handlers
 const handleLoading = (state, loadingStatus) => {
@@ -69,12 +70,12 @@ export const createUserMessageInActiveChat = createAsyncThunk(
   }
 );
 
-export const getGptResponseInActiveChat = createAsyncThunk(
-  'messages/getGptResponseInActiveChat',
+export const getGptResponseForUserMessage = createAsyncThunk(
+  'messages/getGptResponseForUserMessage',
   async (userMessageObject, { getState }) => {
     try {
       const userId = getState().auth.userId;
-      const chatId = getState().chats.activeChat?._id;
+      const chatId = userMessageObject.chat;
       const response = await api.post(
         `/users/${userId}/chats/${chatId}/messages/gpt-response`,
         userMessageObject
@@ -104,6 +105,9 @@ const messagesSlice = createSlice({
     setCurrentUserInput: (state, action) => {
       state.currentUserInput = action.payload;
     },
+    setGptLoading: (state, action) => {
+      state.gptLoading = action.payload;
+    },
   },
   extraReducers: builder => {
     builder
@@ -125,14 +129,19 @@ const messagesSlice = createSlice({
         handleLoading(state, false);
       })
       .addCase(createUserMessageInActiveChat.rejected, handleRejected)
-      .addCase(getGptResponseInActiveChat.pending, (state, action) => {
+      .addCase(getGptResponseForUserMessage.pending, (state, action) => {
         state.gptLoading = true;
       })
-      .addCase(getGptResponseInActiveChat.fulfilled, (state, action) => {
+      .addCase(getGptResponseForUserMessage.fulfilled, (state, action) => {
         state.messages[action.payload._id] = action.payload;
         state.gptLoading = false;
       })
-      .addCase(getGptResponseInActiveChat.rejected, (state, action) => {
+      .addCase(getGptResponseForUserMessage.rejected, (state, action) => {
+        state.gptLoading = false;
+      })
+
+      // chatsSlice actions
+      .addCase(setActiveChat, (state, action) => {
         state.gptLoading = false;
       });
   },

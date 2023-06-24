@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../api/axiosInstance';
 import {
   createUserMessageInActiveChat,
-  getGptResponseInActiveChat,
+  getGptResponseForUserMessage,
 } from './messagesSlice';
 import buildObjectMapFromArray from '../util/buildObjectMapFromArray';
 import { setCurrentlySelectedDropdownCourse } from './coursesSlice';
@@ -171,12 +171,24 @@ const chatsSlice = createSlice({
       .addCase(
         softDeleteSelectedDropdownCourseChats.fulfilled,
         (state, action) => {
+          if (state.activeChat && action.payload[state.activeChat._id]) {
+            state.activeChat = null;
+          }
           state.userChats = { ...state.userChats, ...action.payload };
           handleLoading(state, false);
           state.waitingFirstMessage = false;
         }
       )
       .addCase(softDeleteSelectedDropdownCourseChats.rejected, handleRejected)
+      .addCase(softDeleteSingleChat.pending, handlePending)
+      .addCase(softDeleteSingleChat.fulfilled, (state, action) => {
+        if (state.activeChat._id === action.payload._id) {
+          state.activeChat = null;
+        }
+        state.userChats = { ...state.userChats, ...action.payload };
+        handleLoading(state, false);
+      })
+      .addCase(softDeleteSingleChat.rejected, handleRejected)
 
       // messagesSlice actions
       .addCase(createUserMessageInActiveChat.fulfilled, (state, action) => {
@@ -184,10 +196,8 @@ const chatsSlice = createSlice({
         state.userChats[activeChatId].messages.push(action.payload._id);
         state.activeChat = state.userChats[activeChatId];
       })
-      .addCase(getGptResponseInActiveChat.fulfilled, (state, action) => {
-        const activeChatId = state.activeChat._id;
-        state.userChats[activeChatId].messages.push(action.payload._id);
-        state.activeChat = state.userChats[activeChatId];
+      .addCase(getGptResponseForUserMessage.fulfilled, (state, action) => {
+        state.userChats[action.payload.chat].messages.push(action.payload._id);
       })
 
       // courseSlice actions
