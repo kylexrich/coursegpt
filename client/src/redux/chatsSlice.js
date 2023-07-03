@@ -167,6 +167,12 @@ const chatsSlice = createSlice({
         }
       )
       .addCase(createChatWithSelectedDropdownCourse.rejected, handleRejected)
+      .addCase(softDeleteSingleChat.pending, handlePending)
+      .addCase(softDeleteSingleChat.fulfilled, (state, action) => {
+        state.userChats[action.payload._id] = action.payload;
+        handleLoading(state, false);
+      })
+      .addCase(softDeleteSingleChat.rejected, handleRejected)
       .addCase(softDeleteSelectedDropdownCourseChats.pending, handlePending)
       .addCase(
         softDeleteSelectedDropdownCourseChats.fulfilled,

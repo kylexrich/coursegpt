@@ -64,6 +64,7 @@ const SidePanel = () => {
   const [defaultDropdownValue, setDefaultDropdownValue] = useState('');
   const existingChats = useSelector(state => state.chats.userChats);
   const [filteredChatsToShow, setFilteredChatsToShow] = useState(existingChats);
+  const activeChat = useSelector(state => state.chats.activeChat);
 
   useEffect(() => {
     if (selectedCourse) {
@@ -113,13 +114,22 @@ const SidePanel = () => {
   };
 
   const handleChatDelete = async id => {
-    await dispatch(setActivePanelInfo());
     await dispatch(softDeleteSingleChat(id));
-    await dispatch(fetchUserChats());
+    if (id === activeChat._id) {
+      await dispatch(setActivePanelInfo());
+      await dispatch(setActiveChat(null));
+      await dispatch(setFocusedChat(null));
+      await dispatch(setWaitingFirstMessage(true));
+    }
   };
 
-  const handleClearConversations = () => {
-    dispatch(softDeleteSelectedDropdownCourseChats());
+  const handleClearConversations = async () => {
+    await dispatch(setActivePanelInfo());
+    await dispatch(softDeleteSelectedDropdownCourseChats());
+    await dispatch(setActiveChat(null));
+    await dispatch(setFocusedChat(null));
+    await dispatch(setWaitingFirstMessage(true));
+
   };
 
   useEffect(() => {

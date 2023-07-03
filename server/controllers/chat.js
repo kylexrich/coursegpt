@@ -63,7 +63,7 @@ async function updateChat(req, res) {
   try {
     const chat = await Chat.findById(chatId);
     if (!chat) {
-      res.status(404).send({ error: 'ChatSection not found' });
+      res.status(404).send({ error: 'Chat not found' });
     }
 
     const updatedChat = await Chat.findByIdAndUpdate(chatId, updates, {
