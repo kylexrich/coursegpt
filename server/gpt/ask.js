@@ -11,7 +11,7 @@ const { Logger } = require('../util/Logger');
 async function queryMessage(query, course, tokenBudget) {
   Logger.logEnter();
 
-  const MAX_EMBEDDINGS_TO_INCLUDE = 100;
+  const MAX_EMBEDDINGS_TO_INCLUDE = 3;
   const strings = await stringsRankedByRelatedness(query, course);
 
   if (strings.length === 0) {
