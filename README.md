@@ -26,7 +26,7 @@
 
 ### Project Description
 
-CourseGPT is is an educational app designed to support students by providing on-demand access to their course information. It offers an interface for students to ask questions related to course content and receive informative replies.
+CourseGPT is an educational app designed to support students by providing on-demand access to their course information. It offers an interface for students to ask questions related to course content and receive informative replies.
 
 #### Who is it for?
 
