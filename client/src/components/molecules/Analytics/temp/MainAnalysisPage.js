@@ -3,12 +3,11 @@ import * as GroupHelpers from './groupHelpers';
 import * as SentimentAnalysisHelpers from './sentimentAnalysisHelpers';
 import { Box, Heading, Text, VStack } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
-import { fetchGroups } from '../../../redux/feedbackDataSlice';
-import { extractKeywordPhrases } from './frequentHelpers';
+
 // Data is the return type from the file databaseHelpers in the backend
 // basically, returns 2D array where a feedback info is [ comment, rating, question, answer, course ]
 // example return: [ FeedbackInfo1, FeedbackInfo2 ]
-function MainAnalysisPage({ course, school, data, freqData }) {
+function MainAnalysisPage({ course, school, data, freqData, setBarChartData }) {
   const dispatch = useDispatch();
 
   // FeedbackInfo maps the question to the rest of the feedback info
@@ -65,7 +64,7 @@ function MainAnalysisPage({ course, school, data, freqData }) {
     const model = await SentimentAnalysisHelpers.loadModel();
     const metadata = await SentimentAnalysisHelpers.getMetaData();
     const sentenceAndSentiment = {};
-    // console.log(feedbackInfo);
+
     const comments = [];
     for (let g of groupData) {
       let sentiments = [];
@@ -83,11 +82,30 @@ function MainAnalysisPage({ course, school, data, freqData }) {
       comments.push([g, cur]);
       sentenceAndSentiment[g] = sentiments;
     }
-
-    console.log(extractKeywordPhrases(comments));
-
-    // dispatch(fetchGroups(comments));
     setFeedbackSentiment(sentenceAndSentiment);
+    findBarChartData();
+  };
+
+  const findBarChartData = () => {
+    if (!groups || !feedbackSentiment) {
+      return;
+    }
+    const barChartData = [[], [], []];
+    for (let g of groups) {
+      console.log(g);
+      barChartData[0].push(g[0]);
+      barChartData[1].push(
+        SentimentAnalysisHelpers.calculateMean(feedbackSentiment[g])
+      );
+      barChartData[2].push(
+        SentimentAnalysisHelpers.calculateMedian(feedbackSentiment[g])
+      );
+    }
+    if (!barChartData[0].length) {
+      return;
+    }
+    setBarChartData(barChartData);
+    console.log(barChartData);
   };
 
   return (

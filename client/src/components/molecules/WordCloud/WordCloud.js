@@ -2,7 +2,6 @@ import React from 'react';
 import ReactWordcloud from 'react-wordcloud';
 
 import { Resizable } from 're-resizable';
-import Words from './Words';
 import { useSelector } from 'react-redux';
 import { Text } from '@chakra-ui/react';
 
@@ -15,6 +14,7 @@ const WordCloud = () => {
   };
 
   const isSidePanelVisible = useSelector(state => state.ui.isSidePanelVisible);
+  const wordCloudData = useSelector(state => state.feedbackData.wordCloudData);
 
   return (
     <div>
@@ -38,7 +38,10 @@ const WordCloud = () => {
         style={resizeStyle}
       >
         <div style={{ width: '100%', height: '100%' }}>
-          <ReactWordcloud words={Words} options={{ fontSizes: [24, 48] }} />
+          <ReactWordcloud
+            words={wordCloudData}
+            options={{ fontSizes: [24, 48] }}
+          />
         </div>
       </Resizable>
     </div>

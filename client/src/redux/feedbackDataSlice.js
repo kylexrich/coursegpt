@@ -20,12 +20,9 @@ export const fetchFeedbackAnalysis = createAsyncThunk(
   async (courseId, { getState }) => {
     try {
       const course = courseId || null;
-      console.log('feedback data slice');
       const response = await api.get(`/feedbackData`, { courseId: course });
-      console.log('feedback data slice api call done');
-      // console.log(response.data.feedbackData);
-
-      return response.data.feedbackData;
+      console.log(response);
+      return response.data;
     } catch (error) {
       console.log(error.message);
     }
@@ -54,7 +51,11 @@ export const fetchGroups = createAsyncThunk(
 const feedbackDataSlice = createSlice({
   name: 'feedbackData',
   initialState: {
-    feedbackInfo: [],
+    groups: [],
+    feedbackSentiment: {},
+    barChartData: [[], [], []],
+    wordCloudData: [],
+    scatterChartData: [],
     freqData: {},
   },
   reducers: {},
@@ -62,9 +63,11 @@ const feedbackDataSlice = createSlice({
     builder
       .addCase(fetchFeedbackAnalysis.pending, handlePending)
       .addCase(fetchFeedbackAnalysis.fulfilled, (state, action) => {
-        state.feedbackInfo = action.payload;
-        // console.log(state.feedbackInfo);
-        // console.log('data stuff in feedback data slice');
+        state.groups = action.payload.groups;
+        state.feedbackSentiment = action.payload.feedbackSentiment;
+        state.barChartData = action.payload.barChartData;
+        state.wordCloudData = action.payload.wordCloudData;
+        state.scatterChartData = action.payload.scatterChartData;
       })
       .addCase(fetchFeedbackAnalysis.rejected, handleRejected)
       .addCase(fetchGroups.pending, handlePending)
