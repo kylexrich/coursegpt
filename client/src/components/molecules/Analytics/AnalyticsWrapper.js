@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchUser } from '../../../redux/authSlice';
-import FeedbackData from './temp/mainData';
+import FeedbackData from './mainData';
 import styles from './AnalyticsWrapper.module.css';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Button } from '@chakra-ui/react';
@@ -18,7 +18,6 @@ function AnalyticsWrapper() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [rerenderBubble, setRerenderBubble] = useState(null);
-  const [barChartData, setBarChartData] = useState([[], [], []]);
 
   const selectedAnalyticsView = useSelector(
     state => state.analytics.selectedAnalyticsView
@@ -59,12 +58,9 @@ function AnalyticsWrapper() {
       case 'word':
         return <WordCloud />;
       default:
-        return <FeedbackData setBarChartData={setBarChartData} />;
+        return <FeedbackData />;
     }
   };
-
-  // labels: array of strings
-  // loadedData: array of arrays [[averageSentiment], [medianSentiment]]
 
   return (
     <div
