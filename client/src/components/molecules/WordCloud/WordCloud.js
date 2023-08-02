@@ -26,7 +26,7 @@ const WordCloud = () => {
         m="auto"
         mt="30px"
       >
-        Top Words From The Last 100 Questions
+        Top Words From The Last 100 Pieces of Feedback
       </Text>
       <Resizable
         size={{

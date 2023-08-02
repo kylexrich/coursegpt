@@ -4,20 +4,6 @@ const qaPair = require('./qaPair');
 const { ask } = require('../gpt/ask');
 const { generateChatTitle } = require('../gpt/openAI');
 
-async function getAllMessages(req, res) {
-  // TODO
-  const chatId = req.params.chatId;
-  const messages = await Message.find({ chat: chatId });
-  res.status(200).json({ messages });
-}
-
-async function getMessage(req, res) {
-  // TODO
-  const chatId = req.params.chatId;
-  const msgId = req.params.messageId;
-  res.send({ data: `Hello get  msg ${msgId} from chat ${chatId}` });
-}
-
 async function createUserMessage(req, res) {
   try {
     const chatId = req.params.chatId;
@@ -85,25 +71,7 @@ async function getGptResponse(req, res) {
   }
 }
 
-async function updateMessage(req, res) {
-  // TODO
-  const chatId = req.params.chatId;
-  const msgId = req.params.messageId;
-  res.send({ data: `Hello update msg ${msgId} from chat ${chatId}` });
-}
-
-async function deleteMessage(req, res) {
-  // TODO
-  const chatId = req.params.chatId;
-  const msgId = req.params.messageId;
-  res.send({ data: `Hello delete msg ${msgId} from chat ${chatId}` });
-}
-
 module.exports = {
-  getMessage,
   createUserMessage,
-  updateMessage,
-  deleteMessage,
-  getAllMessages,
   getGptResponse,
 };

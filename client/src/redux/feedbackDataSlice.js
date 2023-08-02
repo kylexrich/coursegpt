@@ -37,6 +37,7 @@ const feedbackDataSlice = createSlice({
     barChartData: [[], [], []],
     wordCloudData: [],
     scatterChartData: [],
+    bubbleChartData: [],
     freqData: {},
     hasLoadedData: false,
   },
@@ -50,6 +51,7 @@ const feedbackDataSlice = createSlice({
         state.barChartData = action.payload.barChartData;
         state.wordCloudData = action.payload.wordCloudData;
         state.scatterChartData = action.payload.scatterChartData;
+        state.bubbleChartData = action.payload.bubbleChartData;
         state.hasLoadedData = true;
       })
       .addCase(fetchFeedbackAnalysis.rejected, handleRejected);

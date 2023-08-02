@@ -24,7 +24,7 @@ export const options = {
   plugins: {
     title: {
       display: true,
-      text: 'Sentiment Analysis of the 5 Most Asked Questions',
+      text: 'Sentiment Analysis of the Most Asked Questions',
     },
   },
   responsive: true,

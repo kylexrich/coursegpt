@@ -80,6 +80,7 @@ async function analyzeFeedback(data) {
   const wordCloudData = FrequencyHelpers.extractKeywordPhrases(comments);
   const barChartData = findBarChartData(groups, feedbackSentiment);
   const scatterChartData = findScatterChartData(groups, feedbackSentiment);
+  const bubbleChartData = await findBubbleChartData(wordCloudData, model, metadata)
 
   return {
     groups,
@@ -87,6 +88,7 @@ async function analyzeFeedback(data) {
     barChartData,
     wordCloudData,
     scatterChartData,
+    bubbleChartData
   };
 }
 
@@ -153,15 +155,17 @@ function findScatterChartData(groups, feedbackSentiment) {
   return scatterChartData;
 }
 
-// datasets: [
-//     {
-//       label: 'Sentiment',
-//       data: Array.from({ length: 100 }, () => ({
-//         x: faker.datatype.number({ min: 0, max: 100 }),
-//         y: faker.datatype.number({ min: 0, max: 100 }) / 100,
-//       })),
-//       backgroundColor: 'rgba(255, 99, 132, 1)',
-//     },
-//   ],
+async function findBubbleChartData(wordCloudData, model, metadata) {
+    let transformedData = wordCloudData.map(async ({text, value}) => {
+        let sentimentScore = await getSentimentScore(text, model, metadata);
+        return {
+            id: text,
+            value: value,
+            sentiment: sentimentScore, 
+        }
+    });
+    
+    return Promise.all(transformedData); 
+}
 
 module.exports = { analyzeFeedback };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchUser } from '../../../redux/authSlice';
-import FeedbackData from './mainData';
+import FeedbackData from './MainData';
 import styles from './AnalyticsWrapper.module.css';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Button } from '@chakra-ui/react';
