@@ -6,7 +6,7 @@ course-specific materials and logistical details. Professors and TA's can sit ba
 assistant managing repetitive Q&A, while students can enjoy instant answers to questions for all of their courses in one
 place.
 
-**Live demo:** https://course-gpt.herokuapp.com/ (if offline, run locally—see below).  
+**Live demo:** https://course-gpt.herokuapp.com/ (wait 30s to boot up. If offline, run locally—see below).  
 **Demo accounts:**  
 - Student/admin demo (preloaded chats/analytics): `grading@gmail.com` / `i_love_grading`  
 - Professor demo (upload/train focus): `prof.emily@gmail.com` / `profemilydemo`
